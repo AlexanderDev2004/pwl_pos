@@ -23,10 +23,11 @@ class UserController extends Controller
         // $user = UserModel::find(1);
         // $user = UserModel::where('user_id', 1)->first();
         // $user = UserModel::firstWhere('user_id', 1);
-
-        $user = UserModel::FindOr(20, ['username','nama'], function () {
-            abort(404);
-        });
+        // $user = UserModel::FindOr(20, ['username','nama'], function () {
+        //     abort(404);
+        // });
+        // $user = UserModel::findOrfail(1);
+        $user = UserModel::where('username', 'manager9')->firstOrFail();
         return view('user', ['data' => UserModel::all()]);
     }
 }
