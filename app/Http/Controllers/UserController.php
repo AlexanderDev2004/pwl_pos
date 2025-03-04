@@ -27,7 +27,14 @@ class UserController extends Controller
         //     abort(404);
         // });
         // $user = UserModel::findOrfail(1);
-        $user = UserModel::where('username', 'manager9')->firstOrFail();
+        // $user = UserModel::where('username', 'manager9')->firstOrFail();
+        $data = UserModel::all();
+        $userCount = UserModel::where('level_id', 2)->count();
+        // dd($user);
+        return view('user', [
+            'data' => $data,
+            'userCount' => $userCount
+        ]);
         return view('user', ['data' => UserModel::all()]);
     }
 }
