@@ -99,6 +99,10 @@ class UserController extends Controller
         // $user->isclean();
         // dd($user -> isDirty());
 
+
+        $user = UserModel::with('level')->get();
+        return view('user',['data' => $user]);
+
         $user = UserModel::all();
         return view('user', ['data' => $user]);
     }
