@@ -37,15 +37,15 @@ class UserController extends Controller
         //     'userCount' => $userCount
         // ]);
 
-        $user = UserModel::firstOrNew(
-            [
-                'username' => 'manager33',
-                'nama' => 'manager tiga tiga',
-                'password' => Hash::make('12345'),
-                'level_id' => 2
-            ]
-        );
-        $user-> save();
+        // $user = UserModel::firstOrNew(
+        //     [
+        //         'username' => 'manager33',
+        //         'nama' => 'manager tiga tiga',
+        //         'password' => Hash::make('12345'),
+        //         'level_id' => 2
+        //     ]
+        // );
+        // $user-> save();
 
         // $user = UserModel::updateOrCreate(
         //     ['username' => 'manager22'], // Cek apakah username ini sudah ada
@@ -69,6 +69,35 @@ class UserController extends Controller
         //     ['username' => 'manager'],
         //     ['nama' => 'manager']
         // );
+
+        $user = UserModel::create([
+            'username' => 'manager13',
+            'nama' => 'manager13',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ]);
+        $user->username = 'manager14';
+        $user->save();
+        $user-> wasChanged();
+        $user-> wasChanged('username');
+        $user-> wasChanged('username','level_id');
+        $user-> wasChanged('nama');
+        $user-> wasChanged('nama', 'username');
+        dd($user-> wasChanged(['nama', 'username']));
+        // $user->isDirty();
+        // $user->isDirty('username');
+        // $user->isDirty('nama');
+        // $user->isDirty('nama', 'username');
+
+        // $user->isclean();
+        // $user->isclean('username');
+        // $user->isclean('nama');
+        // $user->isclean('nama', 'username');
+
+        // $user->save();
+        // $user->isDirty();
+        // $user->isclean();
+        // dd($user -> isDirty());
         return view('user', ['data' => UserModel::all()]);
     }
 }
