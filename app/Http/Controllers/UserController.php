@@ -26,11 +26,11 @@ class UserController extends Controller
             'title' => 'Daftar user yang terdaftar dalam sistem'
         ];
 
-        $activeMenu = 'user'; // set menu yang sedang aktif
+        $active_menu = 'user'; // set menu yang sedang aktif
 
-        $level = LevelModel::all(); 
+        $level = LevelModel::all();
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $active_menu]);
     }
 
     // Ambil data user dalam bentuk JSON untuk DataTables
@@ -71,13 +71,13 @@ class UserController extends Controller
         ];
 
         $level = LevelModel::all(); // Ambil data level untuk ditampilkan di form
-        $activeMenu = 'user'; // Set menu yang sedang aktif
+        $active_menu = 'user'; // Set menu yang sedang aktif
 
         return view('user.create', [
             'breadcrumb' => $breadcrumb,
             'page' => $page,
             'level' => $level,
-            'activeMenu' => $activeMenu
+            'activeMenu' => $active_menu
         ]);
     }
 
@@ -127,10 +127,10 @@ class UserController extends Controller
         ];
 
         // Menentukan menu yang sedang aktif
-        $activeMenu = 'user';
+        $active_menu = 'user';
 
         // Mengembalikan tampilan dengan data yang sudah dikonfigurasi
-        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
+        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $active_menu]);
     }
 
     // Menampilkan halaman form edit user
@@ -154,10 +154,10 @@ class UserController extends Controller
         ];
 
         // Menentukan menu yang sedang aktif
-        $activeMenu = 'user';
+        $active_menu = 'user';
 
         // Mengembalikan tampilan dengan data yang sudah dikonfigurasi
-        return view('user.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'level' => $level, 'activeMenu' => $activeMenu]);
+        return view('user.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'level' => $level, 'activeMenu' => $active_menu]);
     }
 
     // Menyimpan perubahan data user
