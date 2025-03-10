@@ -27,12 +27,12 @@
                                 <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Level Pengguna</small>
+                        <small class="form-text text-muted">Level Penggunaan</small>
                     </div>
                 </div>
             </div>
         </div>
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+        <table class="table table-bordered table-striped table-hover table-sm"  id="table_user">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -99,7 +99,7 @@
       });
 
       $('#level_id').on('change', function() {
-        dataUser.ajax.reload();
+        dataUser.ajax.reload() ; // reload datatable ajax
       });
 
     });
