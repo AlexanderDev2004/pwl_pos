@@ -19,6 +19,12 @@
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{asset ('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+
+  <!-- jquery-validation -->
+    <script src={{ asset('plugins/jquery-validation/jquery.validate.min.js')}}></script>
+    <script src={{ asset('plugins/jquery-validation/additional-methods.min.js')}}></script>
 
   @stack('css') <!-- Digunakan untuk memanggil custom css dari perintah push('css') pada masing-masing view -->
 </head>
