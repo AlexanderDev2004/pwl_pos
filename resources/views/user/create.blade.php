@@ -1,73 +1,141 @@
-@extends('layouts.template')
-
-@section('content')
-    <div class="card card-outline card-primary">
-        <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
-            <div class="card-tools"></div>
-        </div>
-        <div class="card-body">
-            <form method="POST" action="{{ url('user') }}" class="form-horizontal">
-                @csrf
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Level</label>
-                    <div class="col-11">
-                        <select class="form-control" id="level_id" name="level_id" required>
-                            <option value="">- Pilih Level -</option>
-                            @foreach($level as $item)
-                                <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
-                            @endforeach
-                        </select>
-                        @error('level_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+@empty($user)
+    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kesalahan</h5>
+                <button type="button" class="close" data-dismiss="modal" arialabel="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
+                    Data yang anda cari tidak ditemukan
                 </div>
-
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Username</label>
-                    <div class="col-11">
-                        <input type="text" class="form-control" id="username" name="username" value="{{ old('username') }}" required>
-                        @error('username')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Nama</label>
-                    <div class="col-11">
-                        <input type="text" class="form-control" id="nama" name="nama" value="{{ old('nama') }}" required>
-                        @error('nama')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Password</label>
-                    <div class="col-11">
-                        <input type="password" class="form-control" id="password" name="password" required>
-                        @error('password')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label"></label>
-                    <div class="col-11">
-                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-                        <a class="btn btn-sm btn-default ml-1" href="{{ url('user') }}">Kembali</a>
-                    </div>
-                </div>
-            </form>
+                <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
+            </div>
         </div>
     </div>
-@endsection
-
-@push('css')
-@endpush
-
-@push('js')
-@endpush
+@else
+    <form action="{{ url('/user/' . $user->user_id . '/update-ajax') }}" method="POST" id="form-edit">
+        @csrf
+        @method('PUT')
+        <div id="modal-master" class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Data User</h5>
+                    <button type="button" class="close" data-dismiss="modal" arialabel="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Level Pengguna</label>
+                        <select name="level_id" id="level_id" class="form-control" required>
+                            <option value="">- Pilih Level -</option>
+                            @foreach ($level as $l)
+                                <option {{ $l->level_id == $user->level_id ? 'selected' : '' }} value="{{ $l->level_id }}">
+                                    {{ $l->level_nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <small id="error-level_id" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input
+                            value="{{ $user->username }}"
+                            type="text"
+                            name="username"
+                            id="username"
+                            class="form-control"
+                            required
+                        />
+                        <small id="error-username" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama</label>
+                        <input
+                            value="{{ $user->nama }}"
+                            type="text"
+                            name="nama"
+                            id="nama"
+                            class="form-control"
+                            required
+                        />
+                        <small id="error-nama" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input
+                            value=""
+                            type="password"
+                            name="password"
+                            id="password"
+                            class="form-control"
+                        />
+                        <small class="form-text text-muted">
+                            Abaikan jika tidak ingin ubah password
+                        </small>
+                        <small id="error-password" class="error-text form-text text-danger"></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(document).ready(() => {
+            $("#form-edit").validate({
+                rules: {
+                    level_id: {
+                        required: true,
+                        number: true
+                    },
+                    username: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 20
+                    },
+                    nama: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 100
+                    },
+                    password: {
+                        minlength: 6,
+                        maxlength: 20
+                    }
+                },
+                submitHandler: (form) => {
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: $(form).serialize(),
+                        success: (response) => {
+                            if (response.status) {
+                                $('#my-modal').modal('hide');
+                                Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
+                            } else {
+                                $('.error-text').text('');
+                                $.each(response.message_field, (prefix, val) => $('#error-' + prefix).text(val[0]));
+                                Swal.fire({ icon: 'error', title: 'Terjadi Kesalahan', text: response.message });
+                            }
+                        }
+                    });
+                    return false;
+                },
+                errorElement: 'span',
+                errorPlacement: (error, element) => {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: (element) => $(element).addClass('is-invalid'),
+                unhighlight: (element) => $(element).removeClass('is-invalid'),
+            });
+        });
+    </script>
+@endempty
