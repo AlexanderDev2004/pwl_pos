@@ -27,21 +27,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [UserController::class, 'index']);
-    Route::post('/list', [UserController::class, 'list']);
-    Route::get('/create', [UserController::class, 'create']);
-    Route::get('/create_ajax', [UserController::class, 'create_ajax']);
-    Route::post('/', [UserController::class, 'store']);
-    Route::post('/ajax', [UserController::class, 'store_ajax']);
-    Route::get('/{id}', [UserController::class, 'show']);
-    Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
-    Route::get('/{id}/edit', [UserController::class, 'edit']);
-    Route::put('/{id}', [UserController::class, 'update']);
-    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
-    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::post('/list', [UserController::class, 'list'])->name('user.list');
+    Route::get('/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/', [UserController::class, 'store'])->name('user.store');
+
+    Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
+    Route::post('ajax', [UserController::class, 'store_ajax'])->name('user.ajax');
+
+    Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
+
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
+    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
+
     Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
-    Route::delete('/{id}', [UserController::class, 'destroy']);
+
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 });
 
 Route::group(['prefix' => 'level'], function () {

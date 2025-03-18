@@ -82,6 +82,7 @@
                                     text: response.message
                                 });
                             }
+                            dataUser.ajax.reload();
                         }
                     });
                     return false;
