@@ -14,7 +14,7 @@
                 </div>
                 <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
             </div>
-        </div>
+        </div> 
     </div>
 @else
     <form action="{{ url('/user/' . $user->user_id . '/delete_ajax') }}" method="POST" id="form-delete">
