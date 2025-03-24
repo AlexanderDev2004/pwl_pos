@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SupplierController;
@@ -35,91 +36,88 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth')->nam
 Route::middleware('auth')->group(function () {
     Route::get('/', [WelcomeController::class, 'index']);
 
-    Route::group(['prefix' => 'user'], function () {
-        Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
-        Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
-        Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax'])->name('user.show_ajax');
-        Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
-        Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
-        Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax'])->name('user.confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax');
-
-        Route::get('/', [UserController::class, 'index'])->name('user');
-        Route::post('/list', [UserController::class, 'list'])->name('user.list');
-        Route::get('/create', [UserController::class, 'create'])->name('user.create');
-        Route::post('/store', [UserController::class, 'store'])->name('user.store');
-        Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
-        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-        Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
-        Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::middleware(['authorize:ADM,MNG'])->group(function () {
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
+            Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+            Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax'])->name('user.show_ajax');
+            Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
+            Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
+            Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax'])->name('user.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax');
+            //====
+            Route::get('/', [UserController::class, 'index'])->name('user');
+            Route::post('/list', [UserController::class, 'list'])->name('user.list');
+            Route::get('/create', [UserController::class, 'create'])->name('user.create');
+            Route::post('/store', [UserController::class, 'store'])->name('user.store');
+            Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
+            Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+            Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
+            Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+        });
     });
-});
-
-Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [UserController::class, 'index'])->name('user.index');
-    Route::post('/list', [UserController::class, 'list'])->name('user.list');
-    Route::get('/create', [UserController::class, 'create'])->name('user.create');
-    Route::post('/', [UserController::class, 'store'])->name('user.store');
-
-    Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
-    Route::post('ajax', [UserController::class, 'store_ajax'])->name('user.ajax');
-
-    Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
-
-    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
-    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
-
-    Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
-    Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
-
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
-});
-
-Route::middleware(['authorize:ADM'])->group(function () { //wajib user admin
-    Route::group(['prefix' => 'level'], function () {
-        Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax');
-        Route::post('/store_ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax');
-        Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax'])->name('level.show_ajax');
-        Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
-        Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
-        Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
-
-        Route::get('/', [LevelController::class, 'index'])->name('level');
-        Route::post('/list', [LevelController::class, 'list'])->name('level.list');
-        Route::get('/create', [LevelController::class, 'create'])->name('level.create');
-        Route::post('/store', [LevelController::class, 'store'])->name('level.store');
-        Route::get('/{id}', [LevelController::class, 'show'])->name('level.show');
-        Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
-        Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
-        Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+    Route::middleware(['authorize:ADM,MNG'])->group(function () {
+        Route::group(['prefix' => 'level'], function () {
+            Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax');
+            Route::post('/store_ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax');
+            Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax'])->name('level.show_ajax');
+            Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
+            Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
+            Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
+            //====
+            Route::get('/', [LevelController::class, 'index'])->name('level');
+            Route::post('/list', [LevelController::class, 'list'])->name('level.list');
+            Route::get('/create', [LevelController::class, 'create'])->name('level.create');
+            Route::post('/store', [LevelController::class, 'store'])->name('level.store');
+            Route::get('/{id}', [LevelController::class, 'show'])->name('level.show');
+            Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
+            Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
+            Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+        });
     });
-});
 
-Route::group(['prefix' => 'supplier'], function () {
-    Route::get('/', [SupplierController::class, 'index']);          // menampilkan halaman awal supplier
-    Route::post('/list', [SupplierController::class, 'list']);      // menampilkan data supplier dalam bentuk json untuk datatables
-    Route::get('/create', [SupplierController::class, 'create']);   // menampilkan halaman form tambah supplier
-    Route::post('/', [SupplierController::class, 'store']);         // menyimpan data supplier baru
-    Route::get('/{id}', [SupplierController::class, 'show']);       // menampilkan detail supplier
-    Route::get('/{id}/edit', [SupplierController::class, 'edit']);  // menampilkan halaman form edit supplier
-    Route::put('/{id}', [SupplierController::class, 'update']);     // menyimpan perubahan data supplier
-    Route::delete('/{id}', [SupplierController::class, 'destroy']); // menghapus data supplier
-});
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'kategori'], function () {
+            Route::get('/create_ajax', [KategoriController::class, 'create_ajax'])->name('kategori.create_ajax');
+            Route::post('/store_ajax', [KategoriController::class, 'store_ajax'])->name('kategori.store_ajax');
+            Route::get('/{id}/show_ajax', [KategoriController::class, 'show_ajax'])->name('kategori.show_ajax');
+            Route::get('/{id}/edit_ajax', [KategoriController::class, 'edit_ajax'])->name('kategori.edit_ajax');
+            Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax'])->name('kategori.update_ajax');
+            Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax'])->name('kategori.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax'])->name('kategori.delete_ajax');
+            //====
+            Route::get('/', [KategoriController::class, 'index'])->name('kategori');
+            Route::post('/list', [KategoriController::class, 'list'])->name('kategori.list');
+            Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
+            Route::post('/store', [KategoriController::class, 'store'])->name('kategori.store');
+            Route::get('/{id}', [KategoriController::class, 'show'])->name('kategori.show');
+            Route::get('/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+            Route::put('/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+            Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+        });
+    });
 
-
-Route::group(['prefix' => 'kategori'], function () {
-    Route::get('/', [KategoriController::class, 'index']);          // menampilkan halaman awal kategori
-    Route::post('/list', [KategoriController::class, 'list']);      // menampilkan data kategori dalam bentuk json untuk datatables
-    Route::get('/create', [KategoriController::class, 'create']);   // menampilkan halaman form tambah kategori
-    Route::post('/', [KategoriController::class, 'store']);         // menyimpan data kategori baru
-    Route::get('/{id}', [KategoriController::class, 'show']);       // menampilkan detail kategori
-    Route::get('/{id}/edit', [KategoriController::class, 'edit']);  // menampilkan halaman form edit kategori
-    Route::put('/{id}', [KategoriController::class, 'update']);     // menyimpan perubahan data kategori
-    Route::delete('/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
-
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'supplier'], function () {
+            Route::get('/create_ajax', [SupplierController::class, 'create_ajax'])->name('supplier.create_ajax');
+            Route::post('/store_ajax', [SupplierController::class, 'store_ajax'])->name('supplier.store_ajax');
+            Route::get('/{id}/show_ajax', [SupplierController::class, 'show_ajax'])->name('supplier.show_ajax');
+            Route::get('/{id}/edit_ajax', [SupplierController::class, 'edit_ajax'])->name('supplier.edit_ajax');
+            Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax'])->name('supplier.update_ajax');
+            Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax'])->name('supplier.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax'])->name('supplier.delete_ajax');
+            //====
+            Route::get('/', [SupplierController::class, 'index'])->name('supplier');
+            Route::post('/list', [SupplierController::class, 'list'])->name('supplier.list');
+            Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
+            Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
+            Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier.show');
+            Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+            Route::put('/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+            Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+        });
+    });
     Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
         Route::group(['prefix' => 'barang'], function () {
             Route::get('/create_ajax', [BarangController::class, 'create_ajax'])->name('barang.create_ajax');
