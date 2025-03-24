@@ -86,7 +86,7 @@ Route::middleware(['authorize:ADM'])->group(function () { //wajib user admin
         Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
         Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
         Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
-        
+
         Route::get('/', [LevelController::class, 'index'])->name('level');
         Route::post('/list', [LevelController::class, 'list'])->name('level.list');
         Route::get('/create', [LevelController::class, 'create'])->name('level.create');
@@ -119,4 +119,25 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::get('/{id}/edit', [KategoriController::class, 'edit']);  // menampilkan halaman form edit kategori
     Route::put('/{id}', [KategoriController::class, 'update']);     // menyimpan perubahan data kategori
     Route::delete('/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
+
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'barang'], function () {
+            Route::get('/create_ajax', [BarangController::class, 'create_ajax'])->name('barang.create_ajax');
+            Route::post('/store_ajax', [BarangController::class, 'store_ajax'])->name('barang.store_ajax');
+            Route::get('/{id}/show_ajax', [BarangController::class, 'show_ajax'])->name('barang.show_ajax');
+            Route::get('/{id}/edit_ajax', [BarangController::class, 'edit_ajax'])->name('barang.edit_ajax');
+            Route::put('/{id}/update_ajax', [BarangController::class, 'update_ajax'])->name('barang.update_ajax');
+            Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax'])->name('barang.delete_ajax');
+            //====
+            Route::get('/', [BarangController::class, 'index'])->name('barang');
+            Route::post('/list', [BarangController::class, 'list'])->name('barang.list');
+            Route::get('/create', [BarangController::class, 'create'])->name('barang.create');
+            Route::post('/store', [BarangController::class, 'store'])->name('barang.store');
+            Route::get('/{id}', [BarangController::class, 'show'])->name('barang.show');
+            Route::get('/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
+            Route::put('/{id}', [BarangController::class, 'update'])->name('barang.update');
+            Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+        });
+    });
 });
