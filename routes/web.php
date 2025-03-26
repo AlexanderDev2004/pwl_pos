@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['authorize:ADM,MNG'])->group(function () {
         Route::group(['prefix' => 'user'], function () {
             Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
-            Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+            Route::post('/user/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
             Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax'])->name('user.show_ajax');
             Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
             Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
@@ -128,6 +128,8 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/update_ajax', [BarangController::class, 'update_ajax'])->name('barang.update_ajax');
             Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax'])->name('barang.delete_ajax');
+            Route::get('barang/import', [BarangController::class, 'import'])->name('barang.import');
+            Route::post('barang/import_ajax', [BarangController::class, 'import_ajax'])->name('barang.import_ajax');
             //====
             Route::get('/', [BarangController::class, 'index'])->name('barang');
             Route::post('/list', [BarangController::class, 'list'])->name('barang.list');
