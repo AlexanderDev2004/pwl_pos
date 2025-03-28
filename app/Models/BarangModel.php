@@ -21,7 +21,7 @@ class BarangModel extends Model
         'harga_jual',
     ];
 
-
+    public $timestamps = false;
     public function kategori()
     {
         return $this->belongsTo(KategoriModel::class, 'kategori_id', 'kategori_id');

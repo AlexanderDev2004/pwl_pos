@@ -48,8 +48,7 @@ control-sm filter_kategori">
                         <th>No</th>
                         <th>Kode Barang</th>
                         <th>Kode Barang</th>
-                        <th>Harga
-                            Beli</th>
+                        <th>Harga Beli</th>
                         <th>Harga Jual</th>
                         <th>Kategori</th>
                         <th>Aksi</th>
