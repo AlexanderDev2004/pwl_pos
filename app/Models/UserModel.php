@@ -29,7 +29,7 @@ class UserModel extends Authenticatable
         'password' => 'hashed', //casting pw agar dihash otomatis
     ];
 
-
+    public $timestamps = false;
     public function level()
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
