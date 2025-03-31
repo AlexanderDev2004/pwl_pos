@@ -303,7 +303,7 @@ class BarangController extends Controller
         if($request->ajax() || $request->wantsJson()){
             $rules = [
                 // validasi file harus xls atau xlsx, max 1MB
-                'file_barang' => ['required', 'mimes:xlsx', 'max:1024']
+                'file_barang' => ['required', 'mimes:xlsx', 'max:5024']
             ];
 
             $validator = Validator::make($request->all(), $rules);
