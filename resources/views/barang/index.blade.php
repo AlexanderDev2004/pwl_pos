@@ -10,7 +10,10 @@
                     Ajax
                 </button>
                 <a href="{{ route('barang.export_excel') }}" class="btn btn-primary">
-                    <i class="fa fa-file-excel"></i> Export Barang
+                    <i class="fa fa-file-excel"></i> Export Barang Excel
+                </a>
+                <a href="{{ url('barang.export_pdf') }}" class="btn btn-warning"><i class="fa fa-file
+                    pdf"></i> Export Barang PDF
                 </a>
             </div>
         </div>
