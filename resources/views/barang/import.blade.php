@@ -1,32 +1,27 @@
-<form action="{{ url('/barang/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
+<form action="{{ route('barang.import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
     @csrf
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+    <div id="myModal" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Import Data Barang</h5>
-                <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
+                <button type="button" class="close" data-dismiss="modal" arialabel="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label>Download Template</label>
-                    <a href="{{ asset('template_barang.xlsx') }}" class="btn btn-info btn
-sm" download><i
-                            class="fa fa-file-excel"></i>Download</a>
-                    <small id="error-kategori_id" class="error-text form-text text
-danger"></small>
+                    <a href="{{ asset('adminlte/template_barang.xlsx') }}" class="btn btn-info btnsm" download><i
+                            class="fa fa-file-excel"></i> Download</a>
+                    <small id="error-kategori_id" class="error-text form-text textdanger"></small>
                 </div>
                 <div class="form-group">
                     <label>Pilih File</label>
-                    <input type="file" name="file_barang" id="file_barang" class="form
-control" required>
-                    <small id="error-file_barang" class="error-text form-text text
-danger"></small>
+                    <input type="file" name="file_barang" id="file_barang" class="formcontrol" required>
+                    <small id="error-file_barang" class="error-text form-text textdanger"></small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn
-                warning">Batal</button>
+                <button type="button" data-dismiss="modal" class="btn btnwarning">Batal</button>
                 <button type="submit" class="btn btn-primary">Upload</button>
             </div>
         </div>
@@ -42,15 +37,12 @@ danger"></small>
                 },
             },
             submitHandler: function(form) {
-                var formData = new FormData(form); // Jadikan form ke FormData untuk
-                menghandle file
-
+                var formData = new FormData(form); // Jadikan form ke FormData untukmenghandle file
                 $.ajax({
                     url: form.action,
                     type: form.method,
                     data: formData, // Data yang dikirim berupa FormData
-                    processData: false, // setting processData dan contentType ke false,
-                    untuk menghandle file
+                    processData: false, // setting processData dan contentType ke false, untuk menghandle file
                     contentType: false,
                     success: function(response) {
                         if (response.status) { // jika sukses
