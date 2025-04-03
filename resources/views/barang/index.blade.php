@@ -7,7 +7,11 @@
                 <button onclick="modalAction('{{ url('barang/import') }}')" class="btn btninfo">Import Barang</button>
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a>
                 <button onclick="modalAction('{{ url('barang/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
-                    Ajax</button>
+                    Ajax
+                </button>
+                <a href="{{ route('barang.export_excel') }}" class="btn btn-primary">
+                    <i class="fa fa-file-excel"></i> Export Barang
+                </a>
             </div>
         </div>
         <div class="card-body">

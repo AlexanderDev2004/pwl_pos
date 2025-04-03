@@ -14,6 +14,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 class BarangController extends Controller
 {
     /**
@@ -342,5 +343,62 @@ class BarangController extends Controller
         }
 
         return redirect('/barang');
+    }
+
+    public function export_excel()
+    {
+        $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+            ->orderBy('kategori_id')
+            ->with('kategori')
+            ->get();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set headers
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Kode Barang');
+        $sheet->setCellValue('C1', 'Nama Barang');
+        $sheet->setCellValue('D1', 'Harga Beli');
+        $sheet->setCellValue('E1', 'Harga Jual');
+        $sheet->setCellValue('F1', 'Kategori');
+
+        // Style headers
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+
+        // Populate data
+        $row = 2;
+        foreach ($barang as $index => $item) {
+            $sheet->setCellValue('A' . $row, $index + 1);
+            $sheet->setCellValue('B' . $row, $item->barang_kode);
+            $sheet->setCellValue('C' . $row, $item->barang_nama);
+            $sheet->setCellValue('D' . $row, $item->harga_beli);
+            $sheet->setCellValue('E' . $row, $item->harga_jual);
+            $sheet->setCellValue('F' . $row, $item->kategori->kategori_nama);
+            $row++;
+        }
+
+        // Auto-size columns
+        foreach (range('A', 'F') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Barang');
+
+        // Generate and output the file
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data_Barang_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
     }
 }
