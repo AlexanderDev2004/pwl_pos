@@ -308,43 +308,75 @@ class BarangController extends Controller
     }
 
 
-    public function import_ajax(Request $request): JsonResponse|Redirector|RedirectResponse
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            $validator = Validator::make($request->all(), [
-                'file_barang' => ['required', 'mimes:xlsx', 'max:1024'],
+    public function import_ajax(Request $request)
+{
+    if ($request->ajax() || $request->wantsJson()) {
+        $rules = [
+            'file_barang' => ['required', 'mimes:xlsx,xls', 'max:2048']
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'status'   => false,
+                'message'  => 'Validasi Gagal',
+                'msgField' => $validator->errors()
             ]);
-
-            if ($validator->fails()) return Response::json(['status' => false, 'message' => 'Validasi Gagal.', 'message_field' => $validator->errors()]);
-
-            $reader = IOFactory::createReader('Xlsx');
-            $reader->setReadDataOnly(true);
-            $data = $reader->load($request->file('file_barang')->getRealPath())->getActiveSheet()->toArray(null, false, true, true);
-            $insert = [];
-
-            if (count($data) > 1) {
-                foreach ($data as $rows => $value) {
-                    if ($rows > 1) {
-                        $insert[] = [
-                            'kategori_id' => $value['A'],
-                            'barang_kode' => $value['B'],
-                            'barang_nama' => $value['C'],
-                            'harga_beli' => $value['D'],
-                            'harga_jual' => $value['E'],
-                            'created_at' => now(),
-                        ];
-                    }
-                }
-
-                if (count($insert) > 0) BarangModel::insertOrIgnore($insert);
-                return Response::json(['status' => true, 'message' => 'Data berhasil diimpor.']);
-            } else {
-                return Response::json(['status' => false, 'message' => 'Tidak ada data yang diimpor.']);
-            }
         }
 
-        return redirect('/barang');
+        try {
+            $file = $request->file('file_barang');
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray(null, false, true, true);
+
+            $insert = [];
+
+            foreach ($data as $baris => $value) {
+                if ($baris == 1) continue; // Skip header
+
+                // Validasi data wajib isi
+                if (
+                    isset($value['A'], $value['B'], $value['C'], $value['D'], $value['E']) &&
+                    is_numeric($value['A']) && is_numeric($value['D']) && is_numeric($value['E'])
+                ) {
+                    $insert[] = [
+                        'kategori_id' => $value['A'],
+                        'barang_kode' => $value['B'],
+                        'barang_nama' => $value['C'],
+                        'harga_beli'  => $value['D'],
+                        'harga_jual'  => $value['E'],
+                       
+                    ];
+                }
+            }
+
+            if (!empty($insert)) {
+                BarangModel::insertOrIgnore($insert);
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Data berhasil diimport'
+                ]);
+            } else {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Tidak ada data valid yang dapat diimport'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ]);
+        }
     }
+
+    return redirect('/');
+}
+
 
     public function export_excel()
     {
