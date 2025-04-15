@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\LevelModel;
@@ -25,7 +24,6 @@ class AuthController extends Controller
             'level_id' => 'required',
         ]);
 
-
         if (UserModel::where('username', $request->username)->exists()) {
             return response()->json([
                 'status' => false,
@@ -46,9 +44,10 @@ class AuthController extends Controller
             'redirect' => route('login')
         ]);
     }
+
     public function login()
     {
-        if(Auth::check()){ // jika sudah login, maka redirect ke halaman home
+        if (Auth::check()) {
             return redirect('/');
         }
         return view('auth.login');
@@ -56,7 +55,7 @@ class AuthController extends Controller
 
     public function postlogin(Request $request)
     {
-        if($request->ajax() || $request->wantsJson()){
+        if ($request->ajax() || $request->wantsJson()) {
             $credentials = $request->only('username', 'password');
 
             if (Auth::attempt($credentials)) {
@@ -79,9 +78,66 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('login');
+    }
+
+    public function profile($id)
+    {
+        $breadcrumb = (object)[
+            'title' => 'Profil',
+            'list' => ['Home', 'Profil']
+        ];
+        $active_menu = 'profile';
+        $user = UserModel::findOrFail($id);
+        return view('auth.profile', compact('breadcrumb', 'user', 'active_menu'));
+    }
+
+    public function edit($id)
+    {
+        $breadcrumb = (object)[
+            'title' => 'Edit Profil',
+            'list' => ['Home', 'Profil', 'Edit Profil']
+        ];
+        $active_menu = 'profile';
+        $user = UserModel::findOrFail($id);
+
+        return view('auth.edit_profile', compact('breadcrumb', 'user', 'active_menu'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|max:100',
+            'username' => 'required|min:3|max:20',
+            'password' => 'nullable|min:6|max:20|same:password_confirmation',
+        ]);
+
+        $user = UserModel::findOrFail($id);
+
+        if (UserModel::where('username', $request->username)->where('user_id', '!=', $id)->exists()) {
+            return redirect()->back()->withErrors(['username' => 'Username telah digunakan']);
+        }
+
+        $user->nama = $request->nama;
+        $user->username = $request->username;
+
+        if ($request->password) {
+            $user->password = bcrypt($request->password);
+        }
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $extension = $image->getClientOriginalExtension();
+            $filename = 'user_' . $user->user_id . '.' . $extension;
+            $image->move(public_path('admin'), $filename);
+            // Tidak menyimpan ke database
+            $user->avatar = $filename;
+        }
+
+        $user->save();
+
+        return redirect("/profile/{$id}")->with('success', 'Profile updated successfully!');
     }
 }

@@ -30,7 +30,8 @@
                 <form action="{{ route('postlogin') }}" method="POST" id="form-login">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Username">
+                        <input type="text" id="username" name="username" class="form-control"
+                            placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -39,7 +40,8 @@
                         <small id="error-username" class="error-text text-danger"></small>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+                        <input type="password" id="password" name="password" class="form-control"
+                            placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -58,6 +60,10 @@
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
                         <!-- /.col -->
+                    </div>
+                    <!-- Register Link -->
+                    <div class="text-center mt-3">
+                        <a href="{{ route('register') }}">Don't have account yet? <b>Register here</b></a>
                     </div>
                 </form>
             </div>
@@ -84,7 +90,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            error: function(xhr, status, error) {//sedikti tambahan debag gedebug
+            error: function(xhr, status, error) { //sedikti tambahan debag gedebug
                 console.error('AJAX Error: ' + status + error);
                 console.error(xhr.responseText);
                 Swal.fire({
@@ -100,7 +106,7 @@
                 rules: {
                     username: {
                         required: true,
-                        minlength: 4,
+                        minlength: 3,
                         maxlength: 20
                     },
                     password: {
