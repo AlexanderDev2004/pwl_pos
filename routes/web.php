@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -152,6 +153,30 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
             Route::put('/{id}', [BarangController::class, 'update'])->name('barang.update');
             Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+        });
+    });
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'stok'], function () {
+            Route::get('/create_ajax', [StokController::class, 'create_ajax'])->name('barang.create_ajax');
+            Route::post('/store_ajax', [StokController::class, 'store_ajax'])->name('barang.store_ajax');
+            Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax'])->name('barang.show_ajax');
+            Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax'])->name('barang.edit_ajax');
+            Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax'])->name('barang.update_ajax');
+            Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax'])->name('barang.delete_ajax');
+            Route::get('/import', [StokController::class, 'import'])->name('barang.import');
+            Route::post('/import_ajax', [StokController::class, 'import_ajax'])->name('barang.import_ajax');
+            Route::get('export_excel', [StokController::class, 'export_excel'])->name('barang.export_excel');
+            Route::get('export_pdf', [StokController::class, 'export_pdf'])->name('barang.export_pdf');
+            //====
+            Route::get('/', [StokController::class, 'index'])->name('barang');
+            Route::post('/list', [StokController::class, 'list'])->name('barang.list');
+            Route::get('/create', [StokController::class, 'create'])->name('barang.create');
+            Route::post('/store', [StokController::class, 'store'])->name('barang.store');
+            Route::get('/{id}', [StokController::class, 'show'])->name('barang.show');
+            Route::get('/{id}/edit', [StokController::class, 'edit'])->name('barang.edit');
+            Route::put('/{id}', [StokController::class, 'update'])->name('barang.update');
+            Route::delete('/{id}', [StokController::class, 'destroy'])->name('barang.destroy');
         });
     });
 });
