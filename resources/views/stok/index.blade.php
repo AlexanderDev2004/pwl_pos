@@ -5,7 +5,6 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                {{-- Uncomment buttons if needed --}}
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('stok/create') }}">Tambah</a>
                 <button onclick="modalAction('{{ url('/stok/import') }}')" class="btn btn-sm btn-info mt-1">Import Stok</button>
                 <a href="{{ url('/stok/export_excel') }}" class="btn btn-sm btn-primary mt-1"><i class="fa fa-file-excel"></i> Export Stok</a>
@@ -15,18 +14,17 @@
         </div>
         <div class="card-body">
             @if (session('success'))
-                <div class="alert alert-success">{{session('success')}}</div>
+                <div class="alert alert-success">{{ session('success') }}</div>
             @endif
             @if (session('error'))
-                <div class="alert alert-danger">{{session('error')}}</div>
+                <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
             <table class="table table-bordered table-striped table-hover table-sm" id="table_stok">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Stok</th>
-                        <th>Supplier</th>
                         <th>Barang</th>
+                        <th>Supplier</th>
                         <th>User</th>
                         <th>Tanggal</th>
                         <th>Jumlah Stok</th>
@@ -49,15 +47,15 @@
                 $('#myModal').modal('show');
             });
         }
-        var dataStok;
+
         $(document).ready(function() {
-            dataStok = $('#table_stok').DataTable({
+            $('#table_stok').DataTable({
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('stok/list') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": function (d) {
+                    "data": function(d) {
                         d.stok_id = $('#stok_id').val();
                     }
                 },
@@ -67,7 +65,7 @@
                     orderable: false,
                     searchable: false
                 }, {
-                    data: "stok",
+                    data: "barang",
                     className: "",
                     orderable: true,
                     searchable: true
@@ -77,22 +75,17 @@
                     orderable: true,
                     searchable: true
                 }, {
-                    data: "barang",
-                    className: "",
-                    orderable: true,
-                    searchable: true
-                }, {
                     data: "user",
                     className: "",
                     orderable: true,
                     searchable: true
                 }, {
-                    data: "tanggal",
+                    data: "stok_tanggal",
                     className: "",
                     orderable: true,
                     searchable: true
                 }, {
-                    data: "jumlah_stok",
+                    data: "stok_jumlah",
                     className: "",
                     orderable: true,
                     searchable: true
@@ -107,4 +100,3 @@
         });
     </script>
 @endpush
-
