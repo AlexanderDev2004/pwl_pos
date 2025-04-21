@@ -86,6 +86,12 @@
                         <p>Stok Barang</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ url('/penjualan') }}" class="nav-link {{ ($active_menu == 'penjualan')? 'active': '' }}">
+                        <i class="nav-icon fas fa-cash-register"></i>
+                        <p>Transaksi Penjualan</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                 <a href="{{ url('/barang') }}"
                     class="nav-link {{ $active_menu == 'penjualan' ? 'active' : '' }} ">

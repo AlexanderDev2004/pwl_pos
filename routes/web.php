@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -177,6 +178,30 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}/edit', [StokController::class, 'edit'])->name('barang.edit');
             Route::put('/{id}', [StokController::class, 'update'])->name('barang.update');
             Route::delete('/{id}', [StokController::class, 'destroy'])->name('barang.destroy');
+        });
+    });
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'penjualan'], function () {
+            Route::get('/create_ajax', [PenjualanController::class, 'create_ajax'])->name('penjualan.create_ajax');
+            Route::post('/store_ajax', [PenjualanController::class, 'store_ajax'])->name('penjualan.store_ajax');
+            Route::get('/{id}/show_ajax', [PenjualanController::class, 'show_ajax'])->name('penjualan.show_ajax');
+            Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax'])->name('penjualan.edit_ajax');
+            Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax'])->name('penjualan.update_ajax');
+            Route::get('/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax'])->name('penjualan.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax'])->name('penjualan.delete_ajax');
+            Route::get('/import', [PenjualanController::class, 'import'])->name('penjualan.import');
+            Route::post('/import_ajax', [PenjualanController::class, 'import_ajax'])->name('penjualan.import_ajax');
+            Route::get('export_excel', [PenjualanController::class, 'export_excel'])->name('penjualan.export_excel');
+            Route::get('export_pdf', [PenjualanController::class, 'export_pdf'])->name('penjualan.export_pdf');
+            //====
+            Route::get('/', [PenjualanController::class, 'index'])->name('penjualan');
+            Route::post('/list', [PenjualanController::class, 'list'])->name('penjualan.list');
+            Route::get('/create', [PenjualanController::class, 'create'])->name('penjualan.create');
+            Route::post('/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+            Route::get('/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
+            Route::get('/{id}/edit', [PenjualanController::class, 'edit'])->name('penjualan.edit');
+            Route::put('/{id}', [PenjualanController::class, 'update'])->name('penjualan.update');
+            Route::delete('/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
         });
     });
 });
