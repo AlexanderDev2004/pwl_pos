@@ -31,27 +31,31 @@
                 <div class="modal-body">
                     <div class="alert alert-warning">
                         <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                        Apakah Anda ingin menghapus data stok seperti di bawah ini?
+                        Apakah Anda ingin menghapus data seperti di bawah ini?
                     </div>
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">Barang :</th>
-                            <td class="col-9">{{ $stok->barang->barang_nama }}</td>
+                            <th class="text-right col-3">ID</th>
+                            <td class="col-9">{{ $stok->stok_id }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Supplier :</th>
+                            <th class="text-right col-3">Supplier</th>
                             <td class="col-9">{{ $stok->supplier->supplier_nama }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">User :</th>
-                            <td class="col-9">{{ $stok->user->nama }}</td>
+                            <th class="text-right col-3">Barang</th>
+                            <td class="col-9">{{ $stok->barang->barang_nama }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Tanggal :</th>
-                            <td class="col-9">{{ date('d-m-Y', strtotime($stok->stok_tanggal)) }}</td>
+                            <th class="text-right col-3">User</th>
+                            <td class="col-9">{{ $stok->user->username }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Jumlah Stok :</th>
+                            <th class="text-right col-3">Tanggal Stok</th>
+                            <td class="col-9">{{ $stok->stok_tanggal }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Jumlah Stok</th>
                             <td class="col-9">{{ $stok->stok_jumlah }}</td>
                         </tr>
                     </table>
@@ -80,7 +84,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataStok.ajax.reload();
+                                tableStok.ajax.reload();
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {
@@ -92,7 +96,7 @@
                                     text: response.message
                                 });
                             }
-                        }
+                        },
                     });
                     return false;
                 },

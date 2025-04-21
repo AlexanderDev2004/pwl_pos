@@ -1,6 +1,6 @@
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
         body {
             font-family: "Times New Roman", Times, serif;
@@ -13,13 +13,8 @@
             border-collapse: collapse;
         }
 
-        td,
-        th {
+        td, th {
             padding: 4px 3px;
-            word-wrap: break-word;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            vertical-align: top;
         }
 
         th {
@@ -69,53 +64,61 @@
             border-bottom: 1px solid;
         }
 
-        .border-all,
-        .border
-
--all th,
-        .border-all td {
+        .border-all, .border-all th, .border-all td {
             border: 1px solid;
         }
     </style>
 </head>
 <body>
-    <table class="border-bottom-header">
-        <tr>
-            <td width="15%" class="text-center"><img src="{{ public_path('polinema-bw.png') }}" class="image"></td>
-            <td width="85%">
-                <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</span>
-                <span class="text-center d-block font-13 font-bold mb-1">POLITEKNIK NEGERI MALANG</span>
-                <span class="text-center d-block font-10">Jl. Soekarno-Hatta No. 9 Malang 65141</span>
-                <span class="text-center d-block font-10">Telepon (0341) 404424 Pes. 101 105, 0341-404420, Fax. (0341) 404420</span>
-                <span class="text-center d-block font-10">Laman: www.polinema.ac.id</span>
-            </td>
-        </tr>
-    </table>
+<table class="border-bottom-header">
+    <tr>
+        <td class="text-center" style="width: 100px; height: 100px;">
+            <img src="{{ public_path('polinema-bw.png') }}" style="width: 80px; height: 80px;">
+        </td>
+        <td width="85%">
+                <span class="text-center d-block font-11 font-bold mb-1">
+                    KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
+                </span>
+            <span class="text-center d-block font-13 font-bold mb-1">
+                    POLITEKNIK NEGERI MALANG
+                </span>
+            <span class="text-center d-block font-10">
+                    Jl. Soekarno-Hatta No. 9 Malang 65141
+                </span>
+            <span class="text-center d-block font-10">
+                    Telepon (0341) 404424 Pes. 101 105, 0341-404420, Fax. (0341) 404420
+                </span>
+            <span class="text-center d-block font-10">
+                    Laman: www.polinema.ac.id
+                </span>
+        </td>
+    </tr>
+</table>
 
-    <h3 class="text-center">LAPORAN DATA STOK</h3>
-    <table class="border-all">
-        <thead>
+<h3 class="text-center">LAPORAN DATA STOK</h3>
+<table class="border-all">
+    <thead>
+        <tr>
+            <th class="text-center">No</th>
+            <th>Username</th>
+            <th>Nama Barang</th>
+            <th>Nama Supplier</th>
+            <th>Tanggal Stok</th>
+            <th>Jumlah Stok</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($stoks as $stok)
             <tr>
-                <th class="text-center">No</th>
-                <th class="text-center">Barang</th>
-                <th class="text-center">Supplier</th>
-                <th class="text-center">User</th>
-                <th class="text-center">Tanggal</th>
-                <th class="text-center">Jumlah Stok</th>
+                <td class="text-center">{{ $loop->iteration }}</td>
+                <td>{{ $stok->user->username }}</td>
+                <td>{{ $stok->barang->barang_nama }}</td>
+                <td>{{ $stok->supplier->supplier_nama }}</td>
+                <td>{{ $stok->stok_tanggal }}</td>
+                <td>{{ $stok->stok_jumlah }}</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach ($stoks as $stok)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $stok->barang->barang_nama }}</td>
-                    <td>{{ $stok->supplier->supplier_nama }}</td>
-                    <td>{{ $stok->user->nama }}</td>
-                    <td>{{ date('d-m-Y', strtotime($stok->stok_tanggal)) }}</td>
-                    <td>{{ $stok->stok_jumlah }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+</table>
 </body>
 </html>

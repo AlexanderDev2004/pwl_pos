@@ -30,48 +30,43 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Barang</label>
-                        <select name="barang_id" id="barang_id" class="form-control" required>
-                            @foreach($barang as $item)
-                                <option value="{{ $item->barang_id }}" {{ $item->barang_id == $stok->barang_id ? 'selected' : '' }}>
-                                    {{ $item->barang_nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <small id="error-barang_id" class="error-text form-text text-danger"></small>
-                    </div>
-                    <div class="form-group">
                         <label>Supplier</label>
                         <select name="supplier_id" id="supplier_id" class="form-control" required>
-                            @foreach($supplier as $item)
-                                <option value="{{ $item->supplier_id }}" {{ $item->supplier_id == $stok->supplier_id ? 'selected' : '' }}>
-                                    {{ $item->supplier_nama }}
-                                </option>
+                            <option value="">- Pilih Supplier -</option>
+                            @foreach ($supplier as $l)
+                                <option value="{{ $l->supplier_id }}" {{ ($l->supplier_id == $stok->supplier_id) ? 'selected' : '' }}>{{ $l->supplier_nama }}</option>
                             @endforeach
                         </select>
                         <small id="error-supplier_id" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
-                        <label>User</label>
+                        <label>Barang Pengguna</label>
+                        <select name="barang_id" id="barang_id" class="form-control" required>
+                            <option value="">- Pilih Barang -</option>
+                            @foreach ($barang as $l)
+                                <option value="{{ $l->barang_id }}" {{ ($l->barang_id == $stok->barang_id) ? 'selected' : '' }}>{{ $l->barang_nama }}</option>
+                            @endforeach
+                        </select>
+                        <small id="error-barang_id" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>User Pengguna</label>
                         <select name="user_id" id="user_id" class="form-control" required>
-                            @foreach($user as $item)
-                                <option value="{{ $item->user_id }}" {{ $item->user_id == $stok->user_id ? 'selected' : '' }}>
-                                    {{ $item->nama }}
-                                </option>
+                            <option value="">- Pilih User -</option>
+                            @foreach ($user as $l)
+                                <option value="{{ $l->user_id }}" {{ ($l->user_id == $stok->user_id) ? 'selected' : '' }}>{{ $l->username }}</option>
                             @endforeach
                         </select>
                         <small id="error-user_id" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
-                        <label>Tanggal</label>
-                        <input type="date" name="stok_tanggal" id="stok_tanggal" class="form-control"
-                               value="{{ date('Y-m-d', strtotime($stok->stok_tanggal)) }}" required>
+                        <label>Tanggal Stok</label>
+                        <input value="{{ $stok->stok_tanggal }}" type="text" name="stok_tanggal" id="stok_tanggal" class="form-control" required>
                         <small id="error-stok_tanggal" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Jumlah Stok</label>
-                        <input type="number" name="stok_jumlah" id="stok_jumlah" class="form-control"
-                               value="{{ $stok->stok_jumlah }}" required min="1">
+                        <input value="{{ $stok->stok_jumlah }}" type="text" name="stok_jumlah" id="stok_jumlah" class="form-control" required>
                         <small id="error-stok_jumlah" class="error-text form-text text-danger"></small>
                     </div>
                 </div>
@@ -86,27 +81,11 @@
         $(document).ready(function() {
             $("#form-edit").validate({
                 rules: {
-                    barang_id: {
-                        required: true,
-                        number: true
-                    },
-                    supplier_id: {
-                        required: true,
-                        number: true
-                    },
-                    user_id: {
-                        required: true,
-                        number: true
-                    },
-                    stok_tanggal: {
-                        required: true,
-                        date: true
-                    },
-                    stok_jumlah: {
-                        required: true,
-                        number: true,
-                        min: 1
-                    }
+                    supplier_id: { required: true, number: true },
+                    barang_id: { required: true, number: true },
+                    user_id: { required: true, number: true },
+                    stok_tanggal: { required: true, minlength: 3, maxlength: 20 },
+                    stok_jumlah: { required: true, maxlength: 8 },
                 },
                 submitHandler: function(form) {
                     $.ajax({
@@ -121,7 +100,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataStok.ajax.reload();
+                                tableStok.ajax.reload();
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {

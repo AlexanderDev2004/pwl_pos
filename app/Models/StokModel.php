@@ -21,6 +21,7 @@ class StokModel extends Model
         'stok_jumlah',
     ];
 
+    public $timestamps = false;
     public function supplier() {
         return $this->belongsTo('App\Models\SupplierModel', 'supplier_id', 'supplier_id');
     }
