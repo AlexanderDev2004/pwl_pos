@@ -14,8 +14,15 @@ class LevelModel extends Model
 
     protected $fillable = ['level_kode', 'level_nama'];
 
+    public $timestamps = false;
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(UserModel::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'level_id'; 
     }
 }
