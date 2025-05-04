@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
     public function index()
     {
         return UserModel::all();
@@ -21,6 +22,7 @@ class UserController extends Controller
 
     public function show(UserModel $user)
     {
+
         return $user;
     }
 

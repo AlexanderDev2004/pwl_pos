@@ -11,6 +11,12 @@ class KategoriModel extends Model
 
     protected $table = 'm_kategori';
     protected $primaryKey = 'kategori_id';
-    
+    public $timestamps = false;
+
     protected $fillable = ['kategori_kode', 'kategori_nama'];
+
+    public function getRouteKeyName()
+    {
+        return 'kategori_id';
+    }
 }

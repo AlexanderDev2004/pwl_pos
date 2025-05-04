@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class UserModel extends Authenticatable implements JWTSubject
 {
@@ -30,6 +31,7 @@ class UserModel extends Authenticatable implements JWTSubject
         'nama',
         'password',
         'avatar',
+        'image',
     ];
 
     protected $hidden = [
@@ -44,6 +46,13 @@ class UserModel extends Authenticatable implements JWTSubject
     public function level()
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+
+    }
+    protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($image) => url('/storage/posts/' . $image),
+        );
     }
 
     //ambil nama role
